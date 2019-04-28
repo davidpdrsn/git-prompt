@@ -1,3 +1,5 @@
+//! Print something like `[master@484c4c9670bb2] ` for shell prompt
+
 use colored::*;
 use git2::*;
 
