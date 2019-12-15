@@ -1,6 +1,6 @@
 //! Print something like `[master@484c4c9670bb2] ` for shell prompt
 
-use colored::*;
+use colorful::*;
 use git2::*;
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error + 'static>>;

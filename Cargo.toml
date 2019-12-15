@@ -6,4 +6,4 @@ edition = "2018"
 
 [dependencies]
 git2 = "0.8.0"
-colored = "1.7.0"
+colorful = "0.2.1"
