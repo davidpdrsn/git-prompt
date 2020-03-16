@@ -13,7 +13,7 @@ macro_rules! print_and_exit {
 }
 
 fn main() -> Result<()> {
-    let repo = Repository::open(".").unwrap_or_else(|_| print_and_exit!(""));
+    let repo = Repository::open_from_env().unwrap_or_else(|_| print_and_exit!(""));
 
     let out = OutputData::new(repo)?;
 
