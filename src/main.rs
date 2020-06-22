@@ -28,7 +28,7 @@ fn main() -> Result<()> {
     .collect::<Vec<_>>()
     .join(" ");
 
-    print!("[{}@{}] ", out.branch().blue(), rest,);
+    print!("[{} @ {}] ", out.branch().blue(), rest,);
 
     Ok(())
 }
