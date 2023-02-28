@@ -23,7 +23,7 @@ fn main() -> Result<()> {
         out.state().map(|s| s.green()),
     ]
     .into_iter()
-    .filter_map(|s| s)
+    .flatten()
     .map(|s| s.to_string())
     .collect::<Vec<_>>()
     .join(" ");
@@ -81,25 +81,27 @@ impl OutputData {
         let mut out = String::new();
         let mut seen = Vec::new();
 
-        for status in self.repo.statuses(None).expect("status iter").iter() {
-            if let Some(status) = status.index_to_workdir() {
-                let delta = status.status();
+        if let Ok(status) = self.repo.statuses(None) {
+            for status in status.iter() {
+                if let Some(status) = status.index_to_workdir() {
+                    let delta = status.status();
 
-                if seen.contains(&delta) {
-                    continue;
-                }
-                seen.push(delta);
+                    if seen.contains(&delta) {
+                        continue;
+                    }
+                    seen.push(delta);
 
-                match delta {
-                    Unmodified => {}
-                    Added => out.push('+'),
-                    Deleted => out.push('-'),
-                    Modified | Renamed | Typechange => out.push('*'),
-                    Copied => {}
-                    Ignored => {}
-                    Untracked => out.push('?'),
-                    Unreadable => {}
-                    Conflicted => out.push('#'),
+                    match delta {
+                        Unmodified => {}
+                        Added => out.push('+'),
+                        Deleted => out.push('-'),
+                        Modified | Renamed | Typechange => out.push('*'),
+                        Copied => {}
+                        Ignored => {}
+                        Untracked => out.push('?'),
+                        Unreadable => {}
+                        Conflicted => out.push('#'),
+                    }
                 }
             }
         }
