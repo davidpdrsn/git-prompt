@@ -50,7 +50,7 @@ impl OutputData {
     }
 
     fn rev(&self) -> Option<String> {
-        let rev = self.head().target().expect("rev").to_string()[0..13].to_string();
+        let rev = self.head().target().expect("rev").to_string()[0..7].to_string();
         Some(rev)
     }
 
