@@ -13,6 +13,10 @@ macro_rules! print_and_exit {
 }
 
 fn main() -> Result<()> {
+    if is_jj_repo()? {
+        print_and_exit!("");
+    }
+
     let repo = Repository::open_from_env().unwrap_or_else(|_| print_and_exit!(""));
 
     let out = OutputData::new(repo)?;
@@ -106,11 +110,7 @@ impl OutputData {
             }
         }
 
-        if out.is_empty() {
-            None
-        } else {
-            Some(out)
-        }
+        if out.is_empty() { None } else { Some(out) }
     }
 
     fn head(&self) -> Reference {
@@ -118,4 +118,20 @@ impl OutputData {
             .head()
             .unwrap_or_else(|_| print_and_exit!("[no head] ".red()))
     }
+}
+
+fn is_jj_repo() -> Result<bool> {
+    for read_dir in std::env::current_dir()?.ancestors().map(std::fs::read_dir) {
+        for dir in read_dir? {
+            let dir = dir?;
+            if dir.path().is_dir()
+                && let Some(stem) = dir.path().file_stem()
+                && stem == ".jj"
+            {
+                return Ok(true);
+            }
+        }
+    }
+
+    Ok(false)
 }
